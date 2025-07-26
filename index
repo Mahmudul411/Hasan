@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Resume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: "Calm Harmony" - A palette grounded in warm neutrals (bg-stone-50, bg-stone-100) with complimentary colors for components (bg-teal-600, text-stone-700) and subtle accents (text-teal-500). The goal is a professional, supportive, and integrated feel. -->
+    <!-- Application Structure Plan: The SPA is designed as a top-down narrative dashboard. It starts with a strong summary, followed by key quantifiable metrics in a "Highlights" section. The core experience is divided into thematic, expandable sections: "Leadership & Management," "Gene Therapy & Editing," "NGS & Analytics," and a comprehensive "Technical Skills" area. This structure allows a recruiter to get a quick overview and then dive deep into specific areas of interest, which is more intuitive and engaging than a chronological resume. Navigation is handled by smooth scrolling from a top nav bar, making exploration seamless. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Weekly sample processing volume. Goal: Compare/Inform. Viz: Bar Chart (Chart.js). Interaction: Hover for details. Justification: Visually impactful way to show high throughput.
+        - Report Info: In-vivo study experience. Goal: Inform/Organize. Viz: Key-value stat cards (HTML/Tailwind). Interaction: None, static display. Justification: Clear, immediate display of critical experience numbers.
+        - Report Info: Technical skills. Goal: Organize/Inform. Viz: Tag-style lists (HTML/Tailwind). Interaction: None. Justification: Scannable and categorized for quick assessment of technical breadth.
+        - Report Info: Core experience bullet points. Goal: Inform/Organize. Viz: Expandable accordion sections (HTML/JS). Interaction: Click to expand/collapse. Justification: Reduces initial information overload and allows users to focus on one area at a time.
+        - Added infographic elements: Unicode icons within highlight cards to visually represent the metric, enhancing immediate comprehension.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* A light gray background */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0d9488; /* teal-600 */
+            border-bottom-color: #0d9488;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+         .highlight-icon {
+            font-size: 2.5rem; /* Large icon size */
+            color: #0d9488; /* teal-600 */
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-teal-700">Gene Therapy Leader & Innovator</h1>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#summary" class="nav-link font-medium">Summary</a>
+                <a href="#highlights" class="nav-link font-medium">Highlights</a>
+                <a href="#experience" class="nav-link font-medium">Experience</a>
+                <a href="#skills" class="nav-link font-medium">Skills</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Summary Section -->
+        <section id="summary" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-stone-800 mb-4">Professional Summary</h2>
+            <div class="bg-white p-8 rounded-xl shadow-md border border-stone-200">
+                <p class="text-lg text-stone-700 leading-relaxed">
+                    A results-driven scientific leader with extensive experience in gene therapy and gene editing, specializing in NGS assay development, team management, and state-of-the-art analytics. Proven ability to lead high-performing teams, manage complex projects from conception to completion, and drive scientific understanding of novel therapeutics. Seeking to leverage expertise in a challenging role to advance gene therapy products by establishing new technologies and providing robust project leadership.
+                </p>
+            </div>
+        </section>
+
+        <!-- Highlights Section -->
+        <section id="highlights" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-stone-800 mb-6">Career Highlights</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Stats Cards -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-stone-200 text-center flex flex-col items-center justify-center">
+                    <span class="highlight-icon">&#128101;</span> <!-- Team icon -->
+                    <h3 class="text-5xl font-bold text-teal-600">2-4</h3>
+                    <p class="text-stone-600 mt-2 font-medium">Scientists & RAs Managed</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border border-stone-200 text-center flex flex-col items-center justify-center">
+                    <span class="highlight-icon">&#128269;</span> <!-- Microscope/Study icon -->
+                    <h3 class="text-5xl font-bold text-teal-600">4-7</h3>
+                    <p class="text-stone-600 mt-2 font-medium">In-Vivo Studies (Monthly)</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border border-stone-200 text-center flex flex-col items-center justify-center">
+                    <span class="highlight-icon">&#129514;</span> <!-- Beaker/Lab icon -->
+                    <h3 class="text-5xl font-bold text-teal-600">5000</h3>
+                    <p class="text-stone-600 mt-2 font-medium">In-Vitro Samples (Weekly)</p>
+                </div>
+
+                <!-- Chart Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-stone-200 md:col-span-2 lg:col-span-3">
+                     <h3 class="text-xl font-semibold text-stone-700 mb-4 text-center">High-Throughput Sample Processing Capacity</h3>
+                     <p class="text-center text-stone-600 mb-4">Demonstrated ability to manage and oversee high-volume sample processing, crucial for accelerating research timelines and supporting multiple concurrent projects.</p>
+                    <div class="chart-container">
+                        <canvas id="throughputChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Experience Section -->
+        <section id="experience" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-stone-800 mb-6">Core Competencies & Experience</h2>
+            <div class="space-y-4">
+                <!-- Accordion Item 1: Leadership & Management -->
+                <div class="bg-white rounded-xl shadow-md border border-stone-200">
+                    <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-teal-700">Leadership & Management</h3>
+                        <span class="text-2xl text-teal-600 transform transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <ul class="list-disc list-inside space-y-3 text-stone-700">
+                                <li>Led and managed a team of 2-4 scientists and research associates as the NGS Team Lead, fostering growth and ensuring high-quality research output.</li>
+                                <li>Managed team operations, including budgeting, task assignment, and resource allocation, to optimize productivity and achieve project milestones.</li>
+                                <li>Provided direct mentorship to junior scientists, guiding their technical development and overseeing the processing of up to 5000 in vitro samples per week.</li>
+                                <li>Served as a key point of contact for the NGS group, interacting with the whole company to align on project goals and deliverables.</li>
+                                <li>Managed cross-functional teams, ensuring seamless collaboration and efficient execution of complex scientific projects.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 2: Gene Therapy & Gene Editing -->
+                <div class="bg-white rounded-xl shadow-md border border-stone-200">
+                    <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-teal-700">Gene Therapy & Gene Editing</h3>
+                        <span class="text-2xl text-teal-600 transform transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <ul class="list-disc list-inside space-y-3 text-stone-700">
+                                <li>Designed and executed CRISPR guide RNA library screening and analysis to identify and validate novel gene editing strategies.</li>
+                                <li>Conducted comprehensive gene editing on- and off-target analysis using in-silico tools, Sanger, and NGS-based methods.</li>
+                                <li>Engineered and tested RNA barcoded virus-like particles to ascertain relative uptake in various cell models.</li>
+                                <li>Led particle design and in-vitro/in-vivo testing in hepatocytes (Primary Mouse, Human, Cyno) in collaboration with technology development teams.</li>
+                                <li>Proficient in Lentiviral transduction and titration for gene delivery applications.</li>
+                                <li>Successfully processed and analyzed samples from in-vivo studies to evaluate the long-term persistence and immunogenicity of gene therapy vectors.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 3: NGS & Analytics -->
+                <div class="bg-white rounded-xl shadow-md border border-stone-200">
+                    <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-teal-700">NGS & Analytics</h3>
+                        <span class="text-2xl text-teal-600 transform transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <ul class="list-disc list-inside space-y-3 text-stone-700">
+                                <li>Spearheaded the development, optimization, and implementation of diverse NGS-based assays, including targeted amplicon, bulk RNA, amplicon methyl, and hybrid capture methyl sequencing.</li>
+                                <li>Acted as the subject matter expert for all NGS assays, providing specialized expertise to troubleshoot challenges and support new project needs.</li>
+                                <li>Optimized in-vitro (Primary cells, Cell lines) and in-vivo (Mouse, NHP) sample extraction, library construction, and sequencing to consistently deliver high-quality data.</li>
+                                <li>Routinely processed and analyzed samples from 4-7 in-vivo mouse/NHP studies monthly, contributing critical data to gene therapy efficacy and safety assessments.</li>
+                                <li>Collaborated with bioinformatics and computational sciences teams to evaluate data quality, develop innovative analysis pipelines, and streamline workflow efficiency.</li>
+                                <li>Analyzed genomic sequencing data using Python, R, and specialized tools to extract critical insights and advance scientific understanding.</li>
+                                <li>Conducted comprehensive molecular analyses on samples from numerous in-vivo gene therapy studies, providing key insights into biodistribution and expression profiles.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Accordion Item 4: Documentation & Quality -->
+                <div class="bg-white rounded-xl shadow-md border border-stone-200">
+                    <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-teal-700">Documentation & Quality Control</h3>
+                        <span class="text-2xl text-teal-600 transform transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <ul class="list-disc list-inside space-y-3 text-stone-700">
+                                <li>Authored and reviewed Standard Operating Procedures (SOPs) for complex analytical assays, ensuring clarity and reproducibility.</li>
+                                <li>Reviewed Clinical Trial Application (CTA) protocols and performed rigorous QC on documentation to ensure regulatory compliance.</li>
+                                <li>Documented all experimental procedures and results using Benchling, maintaining rigorous data integrity and accurate lab records.</li>
+                                <li>Prepared detailed technical reports and presentations for internal and external stakeholders, effectively communicating complex scientific findings.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section id="skills" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-stone-800 mb-6">Technical Skills</h2>
+            <div class="bg-white p-8 rounded-xl shadow-md border border-stone-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Gene Therapy & Editing</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">CRISPR Design & Screening</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Lentiviral Transduction</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Molecular Cloning</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Particle Design</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Next-Generation Sequencing</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Amplicon-Seq</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">RNA-Seq</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Methyl-Seq</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Hybrid Capture</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Bioinformatics & Data Analysis</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">Python</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">R</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">Shell Scripting</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">Jupyter Notebook</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Instrumentation</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">Illumina MiSeq/NextSeq</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">ONT MinION</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">Biomek i7</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">Qubit/Tapestation</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Software & Tools</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">Benchling</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">SnapGene</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">Geneious</span>
+                            <span class="bg-stone-200 text-stone-800 text-sm font-medium px-3 py-1 rounded-full">CRISPResso2</span>
+                        </div>
+                    </div>
+                     <div>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Core Lab Skills</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Primary Cell Culture</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">qPCR/dPCR</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">ELISA</span>
+                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Nucleic Acid Extraction</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white mt-16 border-t border-stone-200">
+        <div class="container mx-auto px-6 py-4 text-center text-stone-500">
+            <p>Interactive resume created to highlight key qualifications and experience.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Chart.js: Throughput Chart
+            const ctx = document.getElementById('throughputChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['In-Vitro Samples (Weekly)', 'In-Vivo Samples (Total)'],
+                    datasets: [{
+                        label: 'Sample Processing Volume',
+                        data: [5000, 500], // Keeping total for in-vivo samples as the user specified 500+ total previously
+                        backgroundColor: [
+                            'rgba(13, 148, 136, 0.6)', // teal-600 with opacity
+                            'rgba(20, 184, 166, 0.6)'  // teal-500 with opacity
+                        ],
+                        borderColor: [
+                            'rgba(13, 148, 136, 1)',
+                            'rgba(20, 184, 166, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#57534e' // stone-600
+                            },
+                            grid: {
+                                color: '#e7e5e4' // stone-200
+                            }
+                        },
+                        x: {
+                             ticks: {
+                                color: '#57534e' // stone-600
+                            },
+                             grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1f2937', // gray-800
+                            titleFont: { size: 16 },
+                            bodyFont: { size: 14 },
+                            padding: 12,
+                            cornerRadius: 6,
+                            displayColors: false
+                        }
+                    }
+                }
+            });
+
+            // Accordion functionality
+            const accordions = document.querySelectorAll('.accordion-toggle');
+            accordions.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector('span');
+                    
+                    // Close other open accordions
+                    accordions.forEach(otherButton => {
+                        if (otherButton !== button) {
+                            otherButton.nextElementSibling.style.maxHeight = null;
+                            otherButton.querySelector('span').classList.remove('rotate-45');
+                            otherButton.querySelector('span').innerHTML = '&#43;';
+                        }
+                    });
+
+                    // Toggle current accordion
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        icon.classList.remove('rotate-45');
+                        icon.innerHTML = '&#43;';
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.classList.add('rotate-45');
+                        icon.innerHTML = '&#43;';
+                    }
+                });
+            });
+
+            // Smooth scrolling and active nav link
+            const navLinks = document.querySelectorAll('a.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            navLinks.forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollInView({
+                        behavior: 'smooth',
+                        block: 'start' 
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
